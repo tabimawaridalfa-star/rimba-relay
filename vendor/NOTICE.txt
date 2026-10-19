@@ -1,0 +1,8 @@
+Firebase JavaScript SDK 10.14.1 — Copyright Google LLC, Apache-2.0.
+Modifikasi distribusi lokal: URL import firebase-app.js pada modul auth dan
+database diganti menjadi ./firebase-app.js. Kode library lainnya tidak diubah.
+Sumber distribusi: https://www.gstatic.com/firebasejs/10.14.1/
+
+Phaser 3.90.0 — MIT; lihat PHASER-LICENSE.md.
+QR Code Generator 1.4.4 — Copyright Kazuhiko Arase, MIT;
+lihat QRCODE-LICENSE.txt dan header qrcode.js.

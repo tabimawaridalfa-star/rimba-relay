@@ -1,0 +1,83 @@
+{
+  "rules": {
+    "rooms": {
+      "$room": {
+        ".read": "auth != null",
+        ".write": "auth != null && ((!data.exists() && newData.child('host').val() === auth.uid) || data.child('host').val() === auth.uid)",
+        ".validate": "$room.matches(/^[A-Z]{4}$/) && newData.hasChildren(['host', 'phase', 'createdAt'])",
+        "host": {
+          ".validate": "newData.isString() && ((!data.exists() && newData.val() === auth.uid) || newData.val() === data.val())"
+        },
+        "slots": {
+          "$slot": {
+            ".write": "auth != null && !data.exists() && newData.child('uid').val() === auth.uid && root.child('rooms').child($room).child('phase').val() === 'lobby' && (!root.child('rooms').child($room).child('slots/0/uid').exists() || root.child('rooms').child($room).child('slots/0/uid').val() !== auth.uid) && (!root.child('rooms').child($room).child('slots/1/uid').exists() || root.child('rooms').child($room).child('slots/1/uid').val() !== auth.uid) && (!root.child('rooms').child($room).child('slots/2/uid').exists() || root.child('rooms').child($room).child('slots/2/uid').val() !== auth.uid) && (!root.child('rooms').child($room).child('slots/3/uid').exists() || root.child('rooms').child($room).child('slots/3/uid').val() !== auth.uid)",
+            ".validate": "($slot === '0' || $slot === '1' || $slot === '2' || $slot === '3') && newData.hasChildren(['uid','name','color'])",
+            "uid": {
+              ".validate": "newData.isString() && (!data.exists() || newData.val() === data.val())"
+            },
+            "name": {
+              ".validate": "newData.isString() && newData.val().length > 0 && newData.val().length <= 16"
+            },
+            "color": {
+              ".validate": "newData.val() === root.child('rooms').child($room).child('palette').child($slot).val()"
+            },
+            "$other": {
+              ".validate": false
+            }
+          }
+        },
+        "inputs": {
+          "$slot": {
+            ".write": "auth != null && root.child('rooms').child($room).child('slots').child($slot).child('uid').val() === auth.uid",
+            ".validate": "newData.hasChildren(['left','right','jump','seq','jumpSeq'])",
+            "left": {
+              ".validate": "newData.isBoolean()"
+            },
+            "right": {
+              ".validate": "newData.isBoolean()"
+            },
+            "jump": {
+              ".validate": "newData.isBoolean()"
+            },
+            "seq": {
+              ".validate": "newData.isNumber() && newData.val() >= 0"
+            },
+            "jumpSeq": {
+              ".validate": "newData.isNumber() && newData.val() >= 0"
+            },
+            "$other": {
+              ".validate": false
+            }
+          }
+        },
+        "presence": {
+          "$slot": {
+            ".write": "auth != null && root.child('rooms').child($room).child('slots').child($slot).child('uid').val() === auth.uid",
+            ".validate": "newData.isBoolean()"
+          }
+        },
+        "palette": {
+          ".validate": "newData.hasChildren(['0', '1', '2', '3', '4'])",
+          "$index": {
+            ".validate": "($index === '0' || $index === '1' || $index === '2' || $index === '3' || $index === '4') && (newData.val() === 'beige' || newData.val() === 'green' || newData.val() === 'pink' || newData.val() === 'purple' || newData.val() === 'yellow')"
+          }
+        },
+        "hostOnline": {
+          ".validate": "newData.isBoolean()"
+        },
+        "phase": {
+          ".validate": "newData.val() === 'lobby' || newData.val() === 'playing' || newData.val() === 'between' || newData.val() === 'ending' || newData.val() === 'gameover'"
+        },
+        "createdAt": {
+          ".validate": "newData.isNumber()"
+        },
+        "level": {
+          ".validate": "newData.isNumber() && newData.val() >= 1 && newData.val() <= 3"
+        },
+        "$other": {
+          ".validate": false
+        }
+      }
+    }
+  }
+}

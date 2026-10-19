@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"
+    />
+    <title>Rimba Relay — oleh Alfa Tabi Mawarid</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body class="controller-page">
+    <section id="join" class="panel join-panel">
+      <span class="eyebrow">RIMBA / RELAY</span>
+      <h1>Siap melompat?</h1>
+      <p>Masuk ke room di layar utama.</p>
+      <form id="join-form">
+        <label for="room">Kode room</label
+        ><input
+          id="room"
+          maxlength="4"
+          pattern="[A-Za-z]{4}"
+          placeholder="ABCD"
+          required
+          autocomplete="off"
+          autocapitalize="characters"
+        /><label for="name">Namamu</label
+        ><input
+          id="name"
+          maxlength="16"
+          required
+          placeholder="Nama petualang"
+          autocomplete="nickname"
+        /><button id="join-button" class="wide">Gabung permainan →</button>
+      </form>
+      <p id="error" class="error" role="alert"></p>
+      <p class="creator small">Dibuat oleh Alfa Tabi Mawarid</p>
+    </section>
+    <section id="pad" hidden>
+      <div class="controller-bar">
+        <span
+          ><img id="avatar" class="controller-avatar" alt="Karakter" /><b
+            id="player-name"
+          ></b></span
+        ><span id="controller-status" class="controller-message"
+          >Menunggu host…</span
+        ><span id="room-label" class="tag"></span>
+      </div>
+      <div class="controls">
+        <div class="directions">
+          <button class="control" data-action="left" aria-label="Kiri">←</button
+          ><button class="control" data-action="right" aria-label="Kanan">
+            →
+          </button>
+        </div>
+        <button class="control jump" data-action="jump">LOMPAT ↑</button>
+      </div>
+    </section>
+    <div class="rotate">
+      ↻<br />Putar HP ke landscape<br />untuk mulai bermain.
+    </div>
+    <script type="module" src="controller.js"></script>
+  </body>
+</html>

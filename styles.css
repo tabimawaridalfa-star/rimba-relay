@@ -1,0 +1,388 @@
+:root {
+  font-family: "DM Sans", system-ui, sans-serif;
+  color: #ecf2e7;
+  background: #101c21;
+  font-synthesis: none;
+}
+* {
+  box-sizing: border-box;
+}
+body {
+  margin: 0;
+}
+button,
+input {
+  font: inherit;
+}
+button {
+  cursor: pointer;
+  border: 0;
+  border-radius: 12px;
+  padding: 16px 24px;
+  font-weight: 700;
+  background: #c7ed85;
+  color: #192728;
+}
+button:disabled {
+  opacity: 0.4;
+  cursor: wait;
+}
+a {
+  color: #c7ed85;
+}
+h1,
+h2,
+h3,
+.code {
+  font-family: "Space Grotesk", system-ui, sans-serif;
+}
+h1 {
+  font-size: clamp(42px, 5vw, 72px);
+  line-height: 1.04;
+  letter-spacing: -3px;
+  margin: 20px 0;
+}
+h2 {
+  font-size: 32px;
+  margin: 10px 0;
+}
+p {
+  color: #a6b9ba;
+  line-height: 1.65;
+}
+header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 24px 5%;
+  border-bottom: 1px solid #ffffff16;
+}
+.brand {
+  font-weight: 700;
+  letter-spacing: 2px;
+}
+.tag {
+  font-size: 12px;
+  letter-spacing: 2px;
+  color: #b9d391;
+}
+.status {
+  font-size: 13px;
+  color: #b8c7c6;
+}
+.layout {
+  max-width: 1320px;
+  margin: 0 auto;
+  padding: 40px 5%;
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: 52px;
+}
+.eyebrow {
+  font-size: 12px;
+  letter-spacing: 2px;
+  color: #c7ed85;
+}
+.hero-art {
+  height: 220px;
+  border-radius: 20px;
+  background: #b9e1e8
+    url("assets/Sprites/Backgrounds/Default/background_color_hills.png")
+    center/auto 100%;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 20px;
+  padding-bottom: 24px;
+  border-bottom: 16px solid #85b562;
+  margin-top: 32px;
+}
+.hero-art img {
+  width: 76px;
+  image-rendering: pixelated;
+}
+.panel {
+  background: #1b2b30;
+  border: 1px solid #ffffff12;
+  border-radius: 22px;
+  padding: 28px;
+}
+.room-top {
+  display: flex;
+  gap: 24px;
+  align-items: center;
+}
+.qr {
+  background: white;
+  padding: 10px;
+  border-radius: 12px;
+  min-width: 140px;
+  min-height: 140px;
+}
+.qr img {
+  display: block;
+  width: 140px;
+  height: 140px;
+}
+.code {
+  font-size: 44px;
+  letter-spacing: 7px;
+  font-weight: 700;
+}
+.small {
+  font-size: 12px;
+  overflow-wrap: anywhere;
+}
+.divider {
+  border-top: 1px solid #ffffff16;
+  margin: 24px 0;
+}
+.player-card {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  background: #101c2166;
+  border-left: 3px solid var(--player);
+  padding: 9px 12px;
+  border-radius: 9px;
+  margin: 10px 0;
+  min-height: 57px;
+}
+.player-card img {
+  width: 32px;
+  height: 40px;
+  object-fit: contain;
+  image-rendering: pixelated;
+}
+.player-card span {
+  flex: 1;
+}
+.player-card b {
+  font-size: 12px;
+  color: var(--player);
+}
+.wide {
+  width: 100%;
+  margin-top: 16px;
+}
+.hint {
+  font-size: 13px;
+}
+.steps {
+  display: flex;
+  gap: 25px;
+  margin-top: 24px;
+  color: #b7c7c8;
+  font-size: 13px;
+}
+.steps b {
+  color: #c7ed85;
+  margin-right: 6px;
+}
+footer {
+  padding: 20px 5%;
+  font-size: 12px;
+  color: #778f94;
+}
+.error {
+  color: #ffc1aa;
+  white-space: pre-wrap;
+}
+[hidden] {
+  display: none !important;
+}
+#game-screen {
+  max-width: 1280px;
+  margin: auto;
+}
+#hud {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 20px;
+  background: #1b2b30;
+}
+#hud-players {
+  display: flex;
+  gap: 12px;
+}
+#hud .player-card {
+  margin: 0;
+  min-height: 44px;
+}
+#hud .player-card img {
+  width: 22px;
+  height: 28px;
+}
+#game canvas {
+  display: block;
+}
+#overlay {
+  position: fixed;
+  inset: 0;
+  background: #08161cdd;
+  display: grid;
+  place-items: center;
+  z-index: 10;
+}
+#overlay .panel {
+  width: min(520px, 90vw);
+}
+input {
+  width: 100%;
+  padding: 14px;
+  border: 1px solid #557076;
+  border-radius: 10px;
+  background: #101c21;
+  color: white;
+  margin: 8px 0 16px;
+}
+label {
+  font-size: 13px;
+  color: #b8cccb;
+}
+.controller-page {
+  touch-action: none;
+  overscroll-behavior: none;
+  user-select: none;
+  -webkit-user-select: none;
+  height: 100dvh;
+  overflow: hidden;
+}
+.join-panel {
+  max-width: 440px;
+  margin: 24px auto;
+  padding: 24px;
+}
+.controller-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 24px;
+}
+.controls {
+  height: calc(100dvh - 80px);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 5%;
+  gap: 20px;
+}
+.directions {
+  display: flex;
+  gap: 18px;
+}
+.control {
+  width: clamp(100px, 21vw, 210px);
+  height: clamp(100px, 45vh, 240px);
+  border-radius: 28px;
+  font-size: 48px;
+  background: #263d44;
+  color: #e7f1ed;
+  border: 2px solid #496268;
+  touch-action: none;
+}
+.control.pressed {
+  background: #7faa70;
+  transform: translateY(3px);
+}
+.jump {
+  background: #c7ed85;
+  color: #192728;
+  font-size: 24px;
+}
+.rotate {
+  display: none;
+}
+.controller-avatar {
+  height: 45px;
+  vertical-align: middle;
+}
+.join-panel h1 {
+  font-size: 40px;
+}
+.controller-message {
+  font-size: 13px;
+  color: #c7ed85;
+}
+@media (max-width: 850px) {
+  .layout {
+    grid-template-columns: 1fr;
+    gap: 28px;
+    padding: 28px 5%;
+  }
+  .hero-art {
+    height: 160px;
+  }
+  .steps {
+    flex-wrap: wrap;
+  }
+  #hud-players .player-card span {
+    display: none;
+  }
+}
+@media (orientation: portrait) {
+  .controller-page #pad:not([hidden]) ~ .rotate {
+    display: flex;
+    position: fixed;
+    inset: 0;
+    background: #101c21f5;
+    z-index: 20;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 40px;
+    font-size: 24px;
+  }
+}
+@media (orientation: landscape) and (max-height: 500px) {
+  .join-panel {
+    max-width: 680px;
+    margin: 8px auto;
+    padding: 18px;
+  }
+  .join-panel h1 {
+    font-size: 28px;
+    letter-spacing: -1px;
+    margin: 8px 0;
+  }
+  .join-panel p {
+    margin: 8px 0;
+  }
+  .join-panel form {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    column-gap: 16px;
+  }
+  .join-panel label[for="room"] {
+    grid-column: 1;
+    grid-row: 1;
+  }
+  .join-panel #room {
+    grid-column: 1;
+    grid-row: 2;
+  }
+  .join-panel label[for="name"] {
+    grid-column: 2;
+    grid-row: 1;
+  }
+  .join-panel #name {
+    grid-column: 2;
+    grid-row: 2;
+  }
+  .join-panel button {
+    grid-column: 1/3;
+    margin-top: 0;
+  }
+  .join-panel input {
+    margin-bottom: 8px;
+  }
+}
+
+/* Kontrol musik kecil di luar area tombol dan HUD permainan. */
+.music-toggle { position: fixed; bottom: 12px; right: 14px; z-index: 20; padding: 8px 12px; font-size: 12px; border: 1px solid #496268; background: #1b2b30; color: #c7ed85; }
+.creator { margin-top: 18px; }
+.ending-credits { border-top: 1px solid #ffffff16; margin-top: 16px; padding-top: 8px; }
+.ending-credits p { font-size: 12px; line-height: 1.45; margin: 8px 0; }
+#overlay .panel { max-height: 92dvh; overflow-y: auto; }

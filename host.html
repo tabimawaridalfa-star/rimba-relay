@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Rimba Relay — oleh Alfa Tabi Mawarid</title>
+    <link rel="stylesheet" href="styles.css" />
+    <script src="vendor/phaser.min.js"></script>
+    <script src="vendor/qrcode.js"></script>
+  </head>
+  <body>
+    <header>
+      <div class="brand">RIMBA / RELAY</div>
+      <span class="tag">SATU LAYAR. SATU TIM. EMPAT PETUALANG.</span
+      ><span id="connection" class="status">Menghubungkan…</span>
+    </header>
+    <button id="music-toggle" class="music-toggle" type="button" aria-pressed="true">Musik: nyala</button>
+    <main id="lobby" class="layout">
+      <section>
+        <span class="eyebrow">PETUALANGAN MULTIPLAYER LOKAL</span>
+        <h1>Jalan bareng.<br />Lompat lebih jauh.</h1>
+        <p>
+          HP jadi controller, layar ini jadi arena.<br />Kumpulkan koin,
+          taklukkan rintangan, dan bawa tim ke bendera terakhir. Nyawa berbagi.
+          Skor tetap milikmu.
+        </p>
+        <div class="hero-art">
+          <img
+            src="assets/Sprites/Characters/Default/character_green_idle.png"
+            alt="Petualang hijau"
+          /><img
+            src="assets/Sprites/Characters/Default/character_beige_jump.png"
+            alt="Petualang beige"
+          /><img
+            src="assets/Sprites/Characters/Default/character_pink_idle.png"
+            alt="Petualang merah muda"
+          /><img
+            src="assets/Sprites/Characters/Default/character_purple_idle.png"
+            alt="Petualang ungu"
+          />
+        </div>
+        <div class="steps">
+          <span><b>01</b> Scan QR di HP</span><span><b>02</b> Pilih nama</span
+          ><span><b>03</b> Putar HP & main!</span>
+        </div>
+        <p class="creator small">Dibuat oleh Alfa Tabi Mawarid</p>
+      </section>
+      <section class="panel">
+        <span class="eyebrow">LOBI PERMAINAN</span>
+        <h2>Ajak timmu masuk</h2>
+        <p class="hint">Maksimal 4 pemain · 3 level · 5 nyawa bersama</p>
+        <div class="room-top">
+          <div id="qr" class="qr"></div>
+          <div>
+            <span class="small">KODE ROOM</span>
+            <div id="room-code" class="code">••••</div>
+            <a id="controller-link" class="small" target="_blank" rel="noopener"
+              >Buka controller ↗</a
+            >
+          </div>
+        </div>
+        <p id="url-hint" class="small"></p>
+        <div class="divider"></div>
+        <div class="status">
+          <span id="player-count">0</span> / 4 pemain terhubung
+        </div>
+        <div id="players"></div>
+        <button id="start" class="wide" disabled>Mulai petualangan →</button>
+        <p class="hint">Audio aktif setelah tombol Mulai ditekan.</p>
+        <p id="error" class="error" role="alert"></p>
+      </section>
+    </main>
+    <section id="game-screen" hidden>
+      <div id="hud">
+        <span id="level-label"></span><strong id="lives"></strong>
+        <div id="hud-players"></div>
+      </div>
+      <div id="game"></div>
+    </section>
+    <div id="overlay" hidden>
+      <div class="panel">
+        <span id="result-label" class="eyebrow"></span>
+        <h2 id="result-title"></h2>
+        <p id="result-copy"></p>
+        <div id="ranking"></div>
+        <div id="ending-credits" class="ending-credits" hidden>
+          <p><strong>Game dibuat oleh Alfa Tabi Mawarid</strong></p>
+          <p>Aset grafis dan efek suara: Kenney (kenney.nl), lisensi CC0.</p>
+          <p>Musik: &quot;bgm_space_upbeat_F&quot; dari paket 400 Indie Game Music Loops oleh Subspace Audio, lisensi CC0.</p>
+        </div>
+        <button id="continue" class="wide"></button>
+      </div>
+    </div>
+    <footer>Rimba Relay · Dunia & rute orisinal · Aset Kenney CC0</footer>
+    <script type="module" src="host.js"></script>
+  </body>
+</html>

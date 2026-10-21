@@ -50,6 +50,21 @@
             }
           }
         },
+        "commands": {
+          "$slot": {
+            ".write": "auth != null && root.child('rooms').child($room).child('slots').child($slot).child('uid').val() === auth.uid",
+            ".validate": "($slot === '0' || $slot === '1' || $slot === '2' || $slot === '3') && newData.hasChildren(['action','seq'])",
+            "action": {
+              ".validate": "newData.val() === 'start' || newData.val() === 'pause' || newData.val() === 'resume' || newData.val() === 'restart' || newData.val() === 'next' || newData.val() === 'again' || newData.val() === 'lobby'"
+            },
+            "seq": {
+              ".validate": "newData.isNumber()"
+            },
+            "$other": {
+              ".validate": false
+            }
+          }
+        },
         "presence": {
           "$slot": {
             ".write": "auth != null && root.child('rooms').child($room).child('slots').child($slot).child('uid').val() === auth.uid",
@@ -66,7 +81,7 @@
           ".validate": "newData.isBoolean()"
         },
         "phase": {
-          ".validate": "newData.val() === 'lobby' || newData.val() === 'playing' || newData.val() === 'between' || newData.val() === 'ending' || newData.val() === 'gameover'"
+          ".validate": "newData.val() === 'lobby' || newData.val() === 'playing' || newData.val() === 'paused' || newData.val() === 'between' || newData.val() === 'ending' || newData.val() === 'gameover'"
         },
         "createdAt": {
           ".validate": "newData.isNumber()"

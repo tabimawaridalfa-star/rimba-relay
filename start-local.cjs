@@ -6,6 +6,7 @@ const http = require("node:http"),
 const root = __dirname,
   port = Number(process.env.PORT) || 8080;
 const mime = {
+  ".webmanifest": "application/manifest+json",
   ".html": "text/html; charset=utf-8",
   ".js": "application/javascript; charset=utf-8",
   ".css": "text/css; charset=utf-8",

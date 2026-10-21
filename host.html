@@ -5,16 +5,20 @@
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <title>Rimba Relay — oleh Alfa Tabi Mawarid</title>
     <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="host-polish.css" />
     <script src="vendor/phaser.min.js"></script>
     <script src="vendor/qrcode.js"></script>
   </head>
-  <body>
+  <body class="host-page">
     <header>
       <div class="brand">RIMBA / RELAY</div>
       <span class="tag">SATU LAYAR. SATU TIM. EMPAT PETUALANG.</span
       ><span id="connection" class="status">Menghubungkan…</span>
     </header>
     <button id="music-toggle" class="music-toggle" type="button" aria-pressed="true">Musik: nyala</button>
+    <details id="sound-panel"><summary>Suara</summary><div class="sound-body"><label for="music-volume">Musik <output id="music-volume-value"></output></label><input id="music-volume" type="range" min="0" max="100" value="22"><label for="effects-volume">Efek <output id="effects-volume-value"></output></label><input id="effects-volume" type="range" min="0" max="100" value="35"></div></details>
+    <div class="fullscreen-corner"><button id="fullscreen-toggle" type="button">Layar penuh</button><span>atau tekan F11</span></div>
+    <button id="prepare-reminder" class="prepare-reminder" hidden>Klik di laptop: Siapkan layar &amp; audio</button>
     <main id="lobby" class="layout">
       <section>
         <span class="eyebrow">PETUALANGAN MULTIPLAYER LOKAL</span>
@@ -24,6 +28,7 @@
           taklukkan rintangan, dan bawa tim ke bendera terakhir. Nyawa berbagi.
           Skor tetap milikmu.
         </p>
+        <details id="how-to"><summary>Cara main</summary><ul><li>D-pad kiri/kanan untuk bergerak. Tombol A melompat; tahan untuk lebih tinggi.</li><li>Sundul kotak “!” dari bawah: hati, bintang, jamur, atau permata.</li><li>Bendera hijau di tengah level adalah checkpoint.</li><li>Lompat lalu darat di atas saklar. Lari ke pintu sebelum 10 detik habis.</li><li>Pemain online dengan slot pertama menjadi pemimpin: MULAI dan JEDA dari HP-nya.</li></ul></details>
         <div class="hero-art">
           <img
             src="assets/Sprites/Characters/Default/character_green_idle.png"
@@ -48,7 +53,7 @@
       <section class="panel">
         <span class="eyebrow">LOBI PERMAINAN</span>
         <h2>Ajak timmu masuk</h2>
-        <p class="hint">Maksimal 4 pemain · 3 level · 5 nyawa bersama</p>
+        <p class="hint">Maksimal 4 pemain · 3 level · Nyawa bersama: 4 + jumlah pemain</p>
         <div class="room-top">
           <div id="qr" class="qr"></div>
           <div>
@@ -65,16 +70,22 @@
           <span id="player-count">0</span> / 4 pemain terhubung
         </div>
         <div id="players"></div>
+        <button id="prepare-screen" class="wide" type="button">Siapkan layar</button>
+        <p id="screen-hint" class="hint">Siapkan layar penuh dan audio, atau tekan F11.</p>
         <button id="start" class="wide" disabled>Mulai petualangan →</button>
-        <p class="hint">Audio aktif setelah tombol Mulai ditekan.</p>
+        <p class="hint">Klik Siapkan layar sekali, lalu pemimpin dapat memulai dari HP.</p>
         <p id="error" class="error" role="alert"></p>
       </section>
     </main>
     <section id="game-screen" hidden>
       <div id="hud">
-        <span id="level-label"></span><strong id="lives"></strong>
+        <button id="pause" type="button">Jeda</button>
+        <span id="level-label"></span>
         <div id="hud-players"></div>
+        <div id="level-progress" role="progressbar" aria-label="Progres level" aria-valuemin="0" aria-valuemax="100"><div id="progress-fill"></div><div id="progress-markers"></div></div>
       </div>
+      <div id="lives" role="img" aria-label="Nyawa bersama: 4 + jumlah pemain"></div>
+      <div id="buff-hud" aria-live="off"></div>
       <div id="game"></div>
     </section>
     <div id="overlay" hidden>
@@ -83,12 +94,14 @@
         <h2 id="result-title"></h2>
         <p id="result-copy"></p>
         <div id="ranking"></div>
+        <div id="awards" hidden></div>
         <div id="ending-credits" class="ending-credits" hidden>
           <p><strong>Game dibuat oleh Alfa Tabi Mawarid</strong></p>
           <p>Aset grafis dan efek suara: Kenney (kenney.nl), lisensi CC0.</p>
-          <p>Musik: &quot;bgm_space_upbeat_F&quot; dari paket 400 Indie Game Music Loops oleh Subspace Audio, lisensi CC0.</p>
+          <p>Musik: &quot;bgm_space_upbeat_F&quot; dan &quot;bgm_stage_F__faster_&quot; dari paket 400 Indie Game Music Loops oleh Subspace Audio, lisensi CC0.</p>
         </div>
         <button id="continue" class="wide"></button>
+        <div id="pause-options" hidden><button id="restart-level">Ulang level</button><button id="back-lobby">Ke lobi</button></div>
       </div>
     </div>
     <footer>Rimba Relay · Dunia & rute orisinal · Aset Kenney CC0</footer>

@@ -1,0 +1,47 @@
+/* Hanya host: panel bantuan tetap satu kolom terpisah dari QR. */
+#how-to {border:1px solid #557076;border-radius:12px;padding:10px 14px;margin:18px 0;background:#1b2b30;}
+summary {cursor:pointer;font-weight:700;color:#c7ed85;}
+#how-to ul {padding-left:20px;font-size:14px;line-height:1.5;margin:10px 0 0;}
+#how-to li+li {margin-top:6px;}
+#sound-panel {position:fixed;bottom:12px;right:145px;z-index:23;font-size:12px;}
+#sound-panel summary {border:1px solid #496268;border-radius:10px;padding:8px 12px;background:#1b2b30;}
+.sound-body {position:absolute;right:0;bottom:44px;width:235px;padding:16px;border-radius:14px;background:#1b2b30;border:1px solid #557076;box-shadow:0 8px 30px #0008;}
+.sound-body label {display:flex;justify-content:space-between;}
+.sound-body input {padding:0;accent-color:#c7ed85;margin:12px 0 16px;}
+#hud {position:relative;}
+#level-progress {position:absolute;left:0;right:0;bottom:0;height:5px;background:#40545a;}
+#progress-fill {height:100%;background:#c7ed85;}
+#progress-markers span {position:absolute;top:-3px;height:11px;width:3px;background:#8bddd5;}
+#progress-markers .finish-mark {background:#ffcf78;width:5px;}
+#overlay.awards-ending .panel {width:min(1100px,94vw);padding:22px;}
+#awards {display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-top:14px;}
+.award-card {border-top:4px solid var(--player);border-radius:12px;background:#101c21;padding:14px;min-width:0;}
+.award-card img {height:46px;float:right;image-rendering:pixelated;}
+.award-card h3 {font-size:18px;overflow-wrap:anywhere;margin:0 0 7px;}
+.award-card strong {color:var(--player);}
+.award-card dl {display:grid;grid-template-columns:1fr auto;gap:7px;font-size:13px;}
+.award-card dd {margin:0;font-weight:700;}
+.award-titles {display:flex;gap:5px;flex-wrap:wrap;}
+.award-titles span {font-size:11px;border-radius:7px;background:#29433e;color:#dcf6b8;padding:5px 7px;}
+@media(min-width:1000px) and (max-height:850px) {
+  .host-page header {padding-top:15px;padding-bottom:15px;}
+  .host-page .layout {padding:20px 4%;gap:38px;}
+  .host-page h1 {font-size:46px;margin:10px 0;}
+  .host-page .hero-art {height:110px;margin-top:16px;padding-bottom:8px;}
+  .host-page .hero-art img {width:55px;}
+  .host-page .panel {padding:18px;}
+  .host-page .room-top .qr img {width:116px;height:116px;}
+  .host-page .qr {min-width:136px;min-height:136px;}
+  .host-page .divider {margin:12px 0;}
+  .host-page #players {display:grid;grid-template-columns:1fr 1fr;gap:6px;}
+  .host-page #players .player-card {margin:0;min-height:44px;padding:5px 8px;font-size:12px;}
+  .host-page #players .player-card img {width:23px;height:30px;}
+  .host-page .wide {margin-top:10px;padding:12px 18px;}
+  .host-page .hint {margin:8px 0;font-size:12px;}
+  .host-page .steps {margin-top:12px;}
+  .host-page footer {padding-top:5px;}
+  #how-to {margin:12px 0;}
+  #how-to ul {font-size:13px;}
+  #overlay.awards-ending h2 {font-size:27px;}
+  #overlay.awards-ending p {margin:6px 0;font-size:13px;}
+}

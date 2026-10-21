@@ -4,8 +4,13 @@
     <meta charset="utf-8" />
     <meta
       name="viewport"
-      content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"
+      content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover"
     />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="theme-color" content="#101c21" />
+    <link rel="manifest" href="manifest.webmanifest" />
+    <link rel="apple-touch-icon" href="assets/Sprites/Characters/Default/character_green_idle.png" />
     <title>Rimba Relay — oleh Alfa Tabi Mawarid</title>
     <link rel="stylesheet" href="styles.css" />
   </head>
@@ -37,6 +42,7 @@
       <p class="creator small">Dibuat oleh Alfa Tabi Mawarid</p>
     </section>
     <section id="pad" hidden>
+      <button id="swap-sides" type="button" aria-label="Tukar sisi kontrol" aria-pressed="false">⇄</button>
       <div class="controller-bar">
         <span
           ><img id="avatar" class="controller-avatar" alt="Karakter" /><b
@@ -46,16 +52,14 @@
           >Menunggu host…</span
         ><span id="room-label" class="tag"></span>
       </div>
+      <div id="remote-roster"></div>
       <div class="controls">
-        <div class="directions">
-          <button class="control" data-action="left" aria-label="Kiri">←</button
-          ><button class="control" data-action="right" aria-label="Kanan">
-            →
-          </button>
-        </div>
-        <button class="control jump" data-action="jump">LOMPAT ↑</button>
+        <div class="direction-shell"><div id="direction-pad" role="group" aria-label="Pad arah kiri dan kanan" tabindex="0"><div class="direction-visual"><span data-side="left">←</span><span data-side="right">→</span></div></div></div>
+        <button id="jump-pad" class="jump-hit" data-action="jump" aria-label="A, lompat"><span class="jump-face">A</span></button>
       </div>
+      <div class="remote-menu"><p id="remote-wait"></p><div id="remote-actions"></div></div>
     </section>
+    <p id="install-hint" class="install-hint" hidden>Tambahkan ke Layar Utama untuk layar penuh</p>
     <div class="rotate">
       ↻<br />Putar HP ke landscape<br />untuk mulai bermain.
     </div>

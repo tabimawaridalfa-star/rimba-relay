@@ -1,9 +1,15 @@
+import { obstacleTiles, fishTextures, createObstacles, tickObstacles } from "./obstacles.js";
+import { createPlatforms } from "./platforms.js";
+import { puzzleTiles, createPuzzle, tickPuzzle } from "./puzzle.js";
+import { createMysteries } from "./buffs.js";
 import { Player } from "./player.js";
-import { enemyFrames, makeEnemy, tickEnemies } from "./enemies.js";
+import { enemyFrames, makeEnemy, tickEnemies, touchEnemy, enemyCollision } from "./enemies.js";
 import level1 from "./levels/level1.js";
 import level2 from "./levels/level2.js";
 import level3 from "./levels/level3.js";
-import { musicPath } from "./config.js";
+import { loadMusic, startMusic, currentMusic } from './audio.js';
+import { countStat } from './stats.js';
+import { createEffects } from './effects.js';
 export const levels = [level1, level2, level3];
 const colors = ["beige", "green", "pink", "purple", "yellow"];
 const sounds = [
@@ -43,6 +49,10 @@ export class Adventure extends Phaser.Scene {
     for (const frames of Object.values(enemyFrames))
       for (const f of frames)
         this.load.image(f, `${root}Enemies/Default/${f}.png`);
+    for (const f of fishTextures) this.load.image(f, `${root}Enemies/Default/${f}.png`);
+    for (const t of obstacleTiles) this.load.image(t, `${root}Tiles/Default/${t}.png`);
+    for (const t of puzzleTiles) this.load.image(t, `${root}Tiles/Default/${t}.png`);
+    this.load.image("snail_shell", `${root}Enemies/Default/snail_shell.png`);
     for (const theme of ["grass", "sand", "purple"])
       for (const part of ["block_top", "block_center"])
         this.load.image(
@@ -50,6 +60,7 @@ export class Adventure extends Phaser.Scene {
           `${root}Tiles/Default/terrain_${theme}_${part}.png`,
         );
     for (const tile of [
+      "block_exclamation", "block_empty", "heart", "star", "gem_blue",
       "block_plank",
       "coin_gold",
       "flag_green_a",
@@ -66,7 +77,7 @@ export class Adventure extends Phaser.Scene {
         `${root}Backgrounds/Default/background_color_${bg}.png`,
       );
     for (const s of sounds) this.load.audio(s, `assets/Sounds/sfx_${s}.ogg`);
-    if (musicPath && !this.cache.audio.exists("music")) this.load.audio("music", musicPath);
+    loadMusic(this);
     this.load.on("loaderror", (file) =>
       this.session.error(`Aset gagal dimuat: ${file.url}`),
     );
@@ -74,7 +85,12 @@ export class Adventure extends Phaser.Scene {
   create() {
     this.level = levels[this.session.level];
     this.finished = false;
+    this.playTime = 0;
+    this.nextBuffHUD = 0;
     this.members = [];
+    createEffects(this);
+    const checkpoint = this.session.checkpoint;
+    const cutoff = checkpoint?.x || 0;
     this.cameras.main.setBackgroundColor("#c2e6e8");
     this.add
       .tileSprite(0, 0, 1280, 720, this.level.background)
@@ -128,12 +144,12 @@ export class Adventure extends Phaser.Scene {
     this.coins = this.physics.add.staticGroup();
     for (const [x, y, n] of this.level.coinRows)
       for (let i = 0; i < n; i++)
-        this.coins
+        if (x + i * 55 >= cutoff) this.coins
           .create(x + i * 55, y, "coin_gold")
           .setScale(0.6)
           .refreshBody();
     this.enemies = this.physics.add.group();
-    this.level.enemies.forEach((e) => makeEnemy(this, e));
+    this.level.enemies.filter(e => e.x >= cutoff).forEach((e) => makeEnemy(this, e));
     this.physics.add.collider(this.enemies, this.ground);
     this.players = this.physics.add.group({ runChildUpdate: false });
     Object.entries(this.session.roster).forEach(([id, data], i) => {
@@ -141,14 +157,21 @@ export class Adventure extends Phaser.Scene {
         this,
         id,
         data,
-        this.level.spawn.x + i * 62,
-        this.level.spawn.y,
+        (checkpoint?.x || this.level.spawn.x) + i * 48,
+        checkpoint?.y || this.level.spawn.y,
       );
       p.lastJumpSeq = this.session.inputs?.[id]?.jumpSeq || 0;
       this.players.add(p);
-      p.setDragX(1450).setMaxVelocity(235, 800);
+      p.setDragX(1812.5).setMaxVelocity(293.75, 1050);
+      if (checkpoint) p.invincibleUntil = this.time.now + 1600;
       this.members.push(p);
     });
+    createMysteries(this);
+    createObstacles(this);
+    createPlatforms(this);
+    createPuzzle(this);
+    if (checkpoint) this.cameras.main.scrollX = Math.max(0, checkpoint.x - 560);
+    this.physics.add.collider(this.enemies, this.enemies, (a,b) => enemyCollision(this,a,b));
     this.physics.add.collider(this.players, this.ground);
     // Arcade memisahkan tubuh pemain; tidak ada callback damage antarpemain.
     this.physics.add.collider(this.players, this.players);
@@ -156,20 +179,11 @@ export class Adventure extends Phaser.Scene {
       if (this.finished || !c.active) return;
       c.disableBody(true, true);
       this.session.scores[p.id] += 10;
+      countStat(this.session,p.id,'coins');this.fx.burst(c.x,c.y,0xffdf72);this.fx.score(c.x,c.y,10);
       this.sfx("coin");
       this.session.hud();
     });
-    this.physics.add.overlap(this.players, this.enemies, (p, e) => {
-      if (this.finished || !e.active) return;
-      const previousBottom = p.body.prev.y + p.body.height;
-      if (p.body.velocity.y > 30 && previousBottom <= e.body.top + 16) {
-        e.disableBody(true, true);
-        p.setVelocityY(-360);
-        this.session.scores[p.id] += 50;
-        this.sfx("bump");
-        this.session.hud();
-      } else this.hurt(p, false);
-    });
+    this.physics.add.overlap(this.players, this.enemies, (p,e) => touchEnemy(this,p,e));
     this.flag = this.physics.add.staticImage(
       this.level.flag.x,
       this.level.flag.y,
@@ -187,6 +201,7 @@ export class Adventure extends Phaser.Scene {
     this.physics.add.overlap(this.flag, this.players, (_flag, p) => {
       if (this.finished) return;
       this.session.scores[p.id] += 100;
+      this.fx.score(p.x,p.y,100);
       this.sfx("magic");
       this.finish("complete", p.dataInfo.name);
     });
@@ -207,24 +222,23 @@ export class Adventure extends Phaser.Scene {
       fontSize: "16px",
       color: "#28494b",
     });
-    // SoundManager dipakai bersama antarlevel: cukup satu instance musik.
-    if (musicPath && this.cache.audio.exists("music")) {
-      const music = this.sound.get("music") || this.sound.add("music", { loop: true, volume: 0.22 });
-      if (!music.isPlaying) music.play();
-      // play() memulihkan konfigurasi awal; terapkan pilihan mute sesudahnya.
-      music.setMute(this.session.musicEnabled === false);
-    }
+    startMusic(this);
     this.session.scene = this;
     this.session.hud();
     this.session.ready?.();
   }
   sfx(key) {
-    if (this.cache.audio.exists(key)) this.sound.play(key, { volume: 0.35 });
+    if (this.cache.audio.exists(key)) this.sound.play(key, { volume: this.session.volumes?.effects ?? 0.35 });
   }
   hurt(p, fall) {
-    if (this.finished || (!fall && this.time.now < p.invincibleUntil)) return;
-    this.session.lives = Math.max(0, this.session.lives - 1);
+    if (this.finished || (!fall && (this.time.now < p.invincibleUntil || p.starUntil > this.playTime))) return;
+    countStat(this.session,p.id,'hits');
+    this.cameras.main.shake(100,.002,false);
+    const absorbed = !fall && p.isBig;
+    if (absorbed) p.shrink();
+    else this.session.lives = Math.max(0, this.session.lives - 1);
     this.sfx("hurt");
+    p.variableJump = false;
     p.invincibleUntil = this.time.now + 1600;
     if (fall) p.respawn(this.safePoint(p));
     else p.setVelocity(-p.body.velocity.x * 0.4, -280);
@@ -242,7 +256,7 @@ export class Adventure extends Phaser.Scene {
     this.physics.pause();
     // Hentikan langsung pada ending, tanpa menunggu respons jaringan.
     if (type === "complete" && this.session.level === levels.length - 1) {
-      this.sound.get("music")?.stop();
+      currentMusic(this)?.stop();
     }
     this.session.end(type, winner);
   }
@@ -252,7 +266,11 @@ export class Adventure extends Phaser.Scene {
       this.physics.pause();
       return;
     } else if (this.physics.world.isPaused) this.physics.resume();
+    this.playTime += delta;
+    if (this.playTime >= this.nextBuffHUD) { this.session.hud(); this.nextBuffHUD = this.playTime + 100; }
     tickEnemies(this);
+    tickObstacles(this);
+    tickPuzzle(this);
     const active = this.members.filter((p) => this.session.presence[p.id]);
     const lead = Math.max(
       ...(active.length ? active : this.members).map((p) => p.x),
@@ -265,11 +283,12 @@ export class Adventure extends Phaser.Scene {
     camera.scrollX = Phaser.Math.Linear(
       camera.scrollX,
       desired,
-      Math.min(1, delta / 160),
+      Math.min(1, delta / 128),
     );
     for (const p of this.members) {
       if (!this.session.presence[p.id]) p.controls = {};
       p.tick(time);
+      this.fx.landing(p);
       if (p.y > 780) this.hurt(p, true);
       if (p.x < camera.scrollX - 45) {
         if (!p.behindSince) p.behindSince = time;
@@ -292,7 +311,7 @@ export function createGame(session) {
     audio: { context: session.audio },
     scale: {
       mode: Phaser.Scale.FIT,
-      autoCenter: Phaser.Scale.CENTER_HORIZONTALLY,
+      autoCenter: Phaser.Scale.CENTER_BOTH,
     },
     physics: {
       default: "arcade",

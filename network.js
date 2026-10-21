@@ -118,6 +118,13 @@ export class Network {
     if (!this.online) return Promise.resolve();
     return set(this.path(`inputs/${this.slot}`), value);
   }
+  async command(action) {
+    if (!this.online) throw new Error("Koneksi terputus. Coba lagi setelah tersambung.");
+    // Transaksi melanjutkan seq setelah reload/reconnect pada slot yang sama.
+    await runTransaction(this.path(`commands/${this.slot}`), old => ({
+      action, seq: (Number.isFinite(old?.seq) ? old.seq : 0) + 1
+    }));
+  }
   publish(value) {
     return update(this.path(), value);
   }

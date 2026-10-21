@@ -386,3 +386,79 @@ label {
 .ending-credits { border-top: 1px solid #ffffff16; margin-top: 16px; padding-top: 8px; }
 .ending-credits p { font-size: 12px; line-height: 1.45; margin: 8px 0; }
 #overlay .panel { max-height: 92dvh; overflow-y: auto; }
+
+/* Host: HUD terpisah, seluruh canvas 16:9 tetap terlihat. */
+.fullscreen-corner { position:fixed; top:8px; right:10px; z-index:21; display:flex; flex-direction:column; align-items:center; gap:2px; }
+.fullscreen-corner button { padding:7px 10px; font-size:12px; }
+.fullscreen-corner span { font-size:10px; color:#a6b9ba; }
+.host-page > header { padding-right:150px; }
+.host-page.playing { height:100dvh; overflow:hidden; }
+.host-page.playing > header, .host-page.playing > footer { display:none; }
+.host-page.playing #game-screen { position:fixed; inset:0; max-width:none; margin:0; }
+.host-page.playing #hud { height:64px; padding-right:145px; }
+.host-page.playing #game { position:absolute; inset:64px 0 0; overflow:hidden; }
+#lives { display:flex; flex-shrink:0; gap:3px; }
+.life-heart { width:27px; height:27px; object-fit:contain; image-rendering:pixelated; }
+.controller-page { padding:env(safe-area-inset-top,0px) env(safe-area-inset-right,0px) env(safe-area-inset-bottom,0px) env(safe-area-inset-left,0px); }
+html:has(.controller-page) { overflow:hidden; overscroll-behavior:none; touch-action:none; }
+.controller-page #pad { height:100%; display:flex; flex-direction:column; min-height:0; }
+.controller-bar { flex:0 0 64px; padding:8px 20px; gap:12px; }
+.controller-page .controls { height:auto; flex:1; min-height:0; padding:10px 5% 34px; }
+.controller-page .control { height:min(45dvh,210px); }
+.install-hint { position:fixed; margin:0; bottom:calc(env(safe-area-inset-bottom,0px) + 6px); left:env(safe-area-inset-left,0px); right:env(safe-area-inset-right,0px); text-align:center; font-size:11px; pointer-events:none; }
+@media (orientation:landscape) and (max-height:450px) { .controller-page .join-panel { margin:4px auto 26px; padding:12px 18px; } .controller-page .join-panel h1 { font-size:25px; } }
+
+/* Console HP: menu tengah, area jempol di sisi kiri dan kanan. */
+.controller-page #pad { position:relative; }
+.controller-page .controller-bar { justify-content:center; flex-wrap:wrap; gap:6px 18px; padding:6px 20%; }
+.controller-page .controller-message { font-size:12px; }
+.controller-page .controls { padding:6px 4% 62px; }
+.controller-page .control { box-shadow:0 7px 0 #081115,0 10px 16px #0006; border:3px solid #5f787e; }
+.controller-page .control:active,.controller-page .control.pressed { transform:translateY(5px); box-shadow:0 2px 0 #081115; }
+.controller-page .jump { border-radius:50%; width:min(40dvh,180px); height:min(40dvh,180px); font-size:48px; }
+.remote-menu { position:absolute; bottom:28px; left:28%; right:28%; text-align:center; }
+#remote-wait { font-size:12px; margin:4px 0; }
+#remote-actions { display:flex; justify-content:center; gap:8px; flex-wrap:wrap; }
+#remote-actions button { min-height:44px; padding:10px 16px; box-shadow:0 4px 0 #071013; }
+#remote-actions button:active { transform:translateY(3px); box-shadow:none; }
+#pad:not([data-phase="playing"]) .controls { visibility:hidden; }
+#pad:not([data-phase="playing"]) .remote-menu { left:12%; right:12%; bottom:34px; }
+#remote-roster { position:absolute; top:70px; left:10%; right:10%; display:flex; justify-content:center; gap:8px; flex-wrap:wrap; }
+#remote-roster .player-card { min-height:40px; margin:0; font-size:12px; }
+#remote-roster .player-card img { width:25px; height:32px; }
+.prepare-reminder { position:fixed; bottom:max(12px, env(safe-area-inset-bottom)); left:50%; transform:translateX(-50%); z-index:22; font-size:11px; line-height:1.3; padding:7px 12px; min-height:0; max-width:calc(100vw - 32px); white-space:normal; }
+#pause-options { display:flex; gap:12px; margin-top:12px; }
+
+#buff-hud { position:absolute; top:70px; right:14px; z-index:6; display:flex; gap:6px; flex-wrap:wrap; max-width:65%; pointer-events:none; }
+#buff-hud span { background:#14272be6; border-radius:12px; padding:4px 8px; font-size:12px; display:flex; align-items:center; gap:5px; }
+#buff-hud img { width:22px; height:22px; object-fit:contain; }
+
+/* Hati langsung di langit, mengikuti sudut canvas dan bukan kamera dunia. */
+.host-page #lives { position:absolute; left:24px; top:88px; z-index:7; gap:5px; background:none; padding:0; pointer-events:none; }
+.host-page #lives .life-heart { width:32px; height:32px; object-fit:contain; image-rendering:pixelated; }
+
+.host-page #lives { display:grid; grid-auto-rows:32px; max-width:calc((100vw - 48px) / 3); }
+
+/* Kenyamanan HP: menu di atas, jempol di area bawah dengan margin aman. */
+.controller-page .controller-bar {height:50px;flex:0 0 50px;padding:3px 70px;gap:4px 12px;flex-wrap:nowrap;}
+.controller-page .controller-avatar {height:32px;}
+.controller-page #player-name {font-size:13px;}
+.controller-page .controller-message {font-size:11px;}
+.controller-page .remote-menu,
+.controller-page #pad:not([data-phase="playing"]) .remote-menu {top:52px;bottom:auto;left:12%;right:12%;}
+.controller-page #remote-wait {font-size:11px;line-height:14px;margin:0 0 4px;}
+.controller-page #remote-actions button {min-height:44px;padding:10px 14px;font-size:13px;}
+.controller-page #remote-roster {top:140px;left:6%;right:6%;}
+.controller-page .controls {position:absolute;inset:148px 24px 24px;padding:0;gap:24px;align-items:center;}
+.controller-page.left-handed .controls {flex-direction:row-reverse;}
+.controller-page .direction-shell {width:calc(clamp(220px,34vw,300px) + 40px);height:calc(min(29dvh,120px) + 40px);flex-shrink:0;}
+#direction-pad {width:100%;height:100%;position:relative;touch-action:none;}
+.direction-visual {position:absolute;inset:20px;display:flex;border:3px solid #5f787e;border-radius:25px;box-shadow:0 7px 0 #081115,0 10px 16px #0006;overflow:hidden;background:#263d44;pointer-events:none;}
+.direction-visual:after {content:'';position:absolute;left:44.5%;width:11%;height:100%;background:#17292f;opacity:.7;}
+.direction-visual span {width:50%;display:grid;place-items:center;font-size:44px;color:#e7f1ed;}
+.direction-visual span.pressed {background:#9acb77;color:#11271c;}
+.controller-page .jump-hit {width:calc(min(32dvh,144px) * 1.2);height:calc(min(32dvh,144px) * 1.2);padding:0;border:0;background:transparent;box-shadow:none;display:grid;place-items:center;touch-action:none;flex-shrink:0;}
+.jump-face {width:83.333%;height:83.333%;display:grid;place-items:center;border-radius:50%;background:#c7ed85;color:#192728;border:3px solid #9cb877;box-shadow:0 7px 0 #081115,0 10px 16px #0006;font-size:46px;pointer-events:none;}
+.jump-hit.pressed .jump-face {transform:translateY(4px);box-shadow:0 3px 0 #081115;background:#a9d567;}
+#swap-sides {position:absolute;right:8px;top:3px;width:44px;height:44px;padding:0;font-size:25px;background:#263d44;color:#c7ed85;}
+.controller-page .install-hint {bottom:max(4px,env(safe-area-inset-bottom));font-size:10px;}
